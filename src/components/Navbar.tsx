@@ -15,7 +15,7 @@ export function Navbar({ dark, onToggleTheme, totalProjects }: NavbarProps) {
     { href: '#destaques', label: 'Destaques' },
     { href: '#projetos', label: `Projetos (${totalProjects})` },
     { href: '#tecnologias', label: 'Tecnologias' },
-    { href: '#sobre', label: 'Sobre' },
+    { href: '#sobre', label: 'Trajetória' },
     { href: '#contato', label: 'Contato' },
   ];
 

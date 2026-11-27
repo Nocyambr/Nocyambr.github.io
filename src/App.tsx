@@ -82,7 +82,10 @@ export function App() {
           onSelectTech={handleSelectTech}
         />
 
-        <JourneySection />
+        <JourneySection
+          projects={PROJECTS}
+          onSelectProject={setSelectedProject}
+        />
 
         <ContactSection />
       </main>
