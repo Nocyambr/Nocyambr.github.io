@@ -19,7 +19,6 @@ const CATEGORIES: Array<'all' | ProjectCategory> = [
   'senai-web',
   'mobile',
   'game-hub',
-  'other',
 ];
 
 function matchesProject(
@@ -66,7 +65,6 @@ export function CatalogSection({
     'senai-web': projects.filter((p) => p.category === 'senai-web').length,
     mobile: projects.filter((p) => p.category === 'mobile').length,
     'game-hub': projects.filter((p) => p.category === 'game-hub').length,
-    other: projects.filter((p) => p.category === 'other').length,
   };
 
   const filtered = projects.filter((project) => {
@@ -75,10 +73,13 @@ export function CatalogSection({
   });
 
   const gameHubParent = projects.find((p) => p.id === 'game-hub');
-  const attachedGames = projects
-    .filter((p) => p.inGameHub)
-    .filter((p) => matchesProject(p, search, onlyLive, techFilter));
-  const attachedCount = projects.filter((p) => p.inGameHub).length;
+  const allAttachedGames = projects.filter((p) => p.inGameHub);
+  const ssoCount = allAttachedGames.filter((p) => p.usesGameHubSso).length;
+  const catalogOnlyCount = allAttachedGames.length - ssoCount;
+  const attachedGames = allAttachedGames.filter((p) =>
+    matchesProject(p, search, onlyLive, techFilter)
+  );
+  const attachedCount = allAttachedGames.length;
 
   function clearFilters() {
     onCategoryChange('all');
@@ -368,7 +369,7 @@ export function CatalogSection({
                   </h4>
                 </div>
                 <p className="text-xs text-stone-500 dark:text-stone-400">
-                  7 com login único (GameHub SSO via Cloudflare D1) · 3 integrados ao catálogo
+                  {ssoCount} com login único (GameHub SSO via Cloudflare D1) · {catalogOnlyCount} integrados ao catálogo
                 </p>
               </div>
 

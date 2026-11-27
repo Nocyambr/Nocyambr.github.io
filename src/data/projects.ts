@@ -1,4 +1,4 @@
-export type ProjectCategory = 'senai-web' | 'mobile' | 'game-hub' | 'other';
+export type ProjectCategory = 'senai-web' | 'mobile' | 'game-hub';
 
 export interface ProjectArchitecture {
   frontend: string;
@@ -34,7 +34,6 @@ export const CATEGORY_LABELS: Record<'all' | ProjectCategory, string> = {
   'senai-web': 'SENAI e Web',
   mobile: 'Mobile',
   'game-hub': 'GameHub',
-  other: 'Outros',
 };
 
 export const PROJECTS: Project[] = [
@@ -525,30 +524,32 @@ export const PROJECTS: Project[] = [
   {
     id: 'mope',
     repoName: 'Mope',
-    title: 'Mope Arena 2D',
-    tagline: 'Arena 2D em JavaScript com economia, loja, chat e banco Supabase.',
+    title: 'Mopa.io — Arena 2D Multiplayer',
+    tagline: 'Arena 2D no ar via Cloudflare Workers com economia, loja, chat e Supabase.',
     summary:
-      'Projeto multiplayer 2D inspirado em Mope.io com modos de jogo, loja, sistema de níveis e missões, chat online e persistência de usuários e pontuações usando Supabase e PL/pgSQL.',
-    category: 'other',
+      'Projeto multiplayer 2D inspirado em Mope.io publicado em Cloudflare Workers e integrado ao catálogo do GameHub. Traz modos de jogo, loja, sistema de níveis e missões, chat online e persistência usando Supabase e PL/pgSQL.',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: false,
     githubUrl: null,
-    liveUrl: null,
+    liveUrl: 'https://mopa.mayconarea42.workers.dev',
     cover: '/covers/mope.webp',
-    updatedAt: 'Ago 2026',
-    primaryStack: ['JavaScript', 'Supabase', 'PostgreSQL'],
-    allTech: ['JavaScript', 'Supabase', 'PostgreSQL'],
+    updatedAt: 'Nov 2026',
+    primaryStack: ['JavaScript', 'Cloudflare Workers', 'Supabase', 'PostgreSQL'],
+    allTech: ['JavaScript', 'Cloudflare Workers', 'Supabase', 'PostgreSQL'],
     architecture: {
       frontend: 'JavaScript modular, HTML5 e folhas de estilo por tela',
-      backend: 'Supabase + scripts PL/pgSQL',
+      backend: 'Cloudflare Workers (assets) + Supabase + scripts PL/pgSQL',
       database: 'PostgreSQL via Supabase (contas, loja, missões e ranking)',
-      quality: 'Suíte de testes e histórico de atualizações documentado',
+      quality: 'Suíte de smoke tests automatizados no GitHub Actions e catálogo do GameHub',
     },
     highlights: [
       'Sistema de economia, loja de personagens, missões e chat em sala.',
       'Integração com banco PostgreSQL via Supabase e funções PL/pgSQL.',
-      'Interface adaptada para desktop e telas mobile.',
+      'Publicado em Cloudflare Workers e anexado ao catálogo do GameHub.',
     ],
   },
 ];
