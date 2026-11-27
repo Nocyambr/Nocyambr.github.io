@@ -1,4 +1,4 @@
-export type ProjectCategory = 'senai-web' | 'mobile' | 'cloud-realtime' | 'games';
+export type ProjectCategory = 'senai-web' | 'mobile' | 'game-hub' | 'other';
 
 export interface ProjectArchitecture {
   frontend: string;
@@ -17,6 +17,8 @@ export interface Project {
   featured: boolean;
   isSenai: boolean;
   isPrivate: boolean;
+  inGameHub?: boolean;
+  usesGameHubSso?: boolean;
   githubUrl: string | null;
   liveUrl: string | null;
   cover: string | null;
@@ -31,8 +33,8 @@ export const CATEGORY_LABELS: Record<'all' | ProjectCategory, string> = {
   all: 'Todos',
   'senai-web': 'SENAI e Web',
   mobile: 'Mobile',
-  'cloud-realtime': 'Cloud e Tempo Real',
-  games: 'Jogos',
+  'game-hub': 'GameHub',
+  other: 'Outros',
 };
 
 export const PROJECTS: Project[] = [
@@ -187,14 +189,14 @@ export const PROJECTS: Project[] = [
     title: 'GameHub — Portal e Login Único (SSO)',
     tagline: 'Central que unifica meus jogos web com autenticação única em Cloudflare D1.',
     summary:
-      'Portal central onde reúno 12 jogos publicados. Implementei um sistema próprio de login único (SSO) usando tickets temporários salvos no Cloudflare D1 para que o jogador entre logado automaticamente nos jogos conectados.',
-    category: 'cloud-realtime',
+      'Portal central onde reúno meus jogos publicados em produção. Implementei um sistema próprio de login único (SSO) usando tickets temporários salvos no Cloudflare D1 para que o jogador entre logado automaticamente nos jogos anexados.',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
     githubUrl: null,
     liveUrl: 'https://game-hub.mayconarea42.workers.dev',
-    cover: null,
+    cover: '/covers/real-game-hub.png',
     updatedAt: 'Nov 2026',
     primaryStack: ['Cloudflare Workers', 'Cloudflare D1', 'JavaScript', 'Playwright'],
     allTech: ['JavaScript', 'Cloudflare Workers', 'Cloudflare D1', 'Playwright', 'CI/CD'],
@@ -217,10 +219,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Xadrez online com Stockfish WASM, 56 puzzles e partidas salvas no Neon.',
     summary:
       'Aplicação de xadrez com regras completas da FIDE, tabuleiro com drag-and-drop e pré-lances, bot com Stockfish em WebAssembly rodando em Web Worker, 56 problemas táticos e salas online persistidas no Neon PostgreSQL.',
-    category: 'cloud-realtime',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: true,
     githubUrl: null,
     liveUrl: 'https://xadrez-classico.pages.dev',
     cover: '/covers/cover-freechess.webp',
@@ -236,7 +240,7 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Stockfish WASM rodando em Web Worker (400 a 2800 ELO) com fallback Negamax em TypeScript.',
       '56 puzzles táticos com rating e sequência salvos localmente e sincronizados no PostgreSQL.',
-      'Salas privadas por código de 6 caracteres com validação de lance no servidor.',
+      'Salas privadas por código de 6 caracteres e login integrado via GameHub SSO.',
     ],
   },
   {
@@ -246,10 +250,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Truco 1v1 e 2v2 com mesa e cartas em Three.js e salas em tempo real.',
     summary:
       'Jogo de Truco Paulista online com mesa, iluminação e cartas geradas por código em Three.js. Inclui manilha dinâmica, mão de 11, mão de ferro, carta encoberta, bots e salas sincronizadas via Socket.io e Durable Objects.',
-    category: 'cloud-realtime',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: true,
     githubUrl: null,
     liveUrl: 'https://truco-3d.mayconarea42.workers.dev',
     cover: '/covers/cover-truco.webp',
@@ -265,7 +271,7 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Cartas, naipes e texturas da mesa desenhados via CanvasTexture sem arquivos de imagem pesados.',
       'Regras do Truco Paulista com timer de 15s por jogada e bots com blefe.',
-      'Efeitos sonoros gerados no navegador via Web Audio API.',
+      'Integrado ao GameHub SSO com efeitos sonoros via Web Audio API.',
     ],
   },
   {
@@ -275,10 +281,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Jogo de luta 2D online com Durable Objects, Neon e testes em Vitest/Playwright.',
     summary:
       'Platform fighter em TypeScript e Canvas 2D. As partidas online rodam em Cloudflare Durable Objects, enquanto contas, vitórias e progresso da torre ficam salvos no Neon PostgreSQL.',
-    category: 'games',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: false,
     githubUrl: null,
     liveUrl: 'https://web-brawl.mayconarea42.workers.dev',
     cover: '/covers/cover-webbrawl.webp',
@@ -304,10 +312,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Jogo em tempo real com Supabase Realtime, Edge Functions e migrations SQL.',
     summary:
       'Jogo multiplayer em React e TypeScript apoiado por Supabase (Postgres, Realtime e Edge Functions). Possui mais de 13 migrations SQL e testes de integração no CI contra um banco Postgres isolado.',
-    category: 'cloud-realtime',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: false,
     githubUrl: null,
     liveUrl: 'https://paises-czr.pages.dev',
     cover: '/covers/cover-paises.webp',
@@ -333,10 +343,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Coleção de 16 jogos de palavras e raciocínio com Supabase e Cloudflare Workers.',
     summary:
       'Aplicação que reúne 16 jogos de palavras, lógica e memória em um só lugar, com conta, progresso e ranking salvos no Supabase e proxy rodando em Cloudflare Workers.',
-    category: 'games',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: true,
     githubUrl: null,
     liveUrl: 'https://palavras.mayconarea42.workers.dev',
     cover: '/covers/cover-tetris.webp',
@@ -351,7 +363,7 @@ export const PROJECTS: Project[] = [
     },
     highlights: [
       '16 jogos integrados sob a mesma conta e sistema de pontuação.',
-      'Uso combinado de Supabase e Cloudflare Workers + D1.',
+      'Uso combinado de Supabase e Cloudflare Workers + D1 com GameHub SSO.',
       'Build e testes E2E automatizados no GitHub Actions.',
     ],
   },
@@ -362,10 +374,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Sobrevivência multiplayer 2D com física rígida em tempo real (Planck.js).',
     summary:
       'Jogo multiplayer 2D onde os jogadores empurram móveis para fechar portas antes da infecção começar. A física rígida (Planck.js) e a sincronização das salas rodam no servidor em Cloudflare Durable Objects.',
-    category: 'games',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: true,
     githubUrl: null,
     liveUrl: 'https://surto-two-houses.mayconarea42.workers.dev',
     cover: '/covers/cover-braains.webp',
@@ -375,7 +389,7 @@ export const PROJECTS: Project[] = [
     architecture: {
       frontend: 'Canvas 2D com suporte a teclado/mouse e joystick touch no celular',
       backend: 'Cloudflare Workers + Durable Objects (Directory e Arena)',
-      database: 'Cloudflare D1 conectado ao GameHub',
+      database: 'Cloudflare D1 conectado ao GameHub SSO',
       quality: 'Testes automatizados de simulação física, assets e runtime',
     },
     highlights: [
@@ -391,10 +405,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Battle Royale 3D em Three.js com bots táticos e login via GameHub SSO.',
     summary:
       'Battle Royale 3D para navegador feito com Three.js em uma ilha de 220m × 220m com 6 setores, rio, airdrops, granadas e 15 bots com IA. Recordes ficam salvos via Cloudflare D1 e GameHub SSO.',
-    category: 'games',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: true,
     githubUrl: null,
     liveUrl: 'https://surviv-3d.mayconarea42.workers.dev',
     cover: '/covers/cover-surviv.webp',
@@ -420,10 +436,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Jogo multiplayer em tempo real com WebSockets e mais de 400 celebridades.',
     summary:
       'Jogo de adivinhar a idade com cronômetro de 10 segundos por rodada, salas multiplayer por código de 2 dígitos via WebSockets, reconexão garantida por 30 segundos e base local com mais de 400 fotos em WebP.',
-    category: 'cloud-realtime',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: true,
     githubUrl: null,
     liveUrl: 'https://acerte-a-idade.mayconarea42.workers.dev',
     cover: '/covers/cover-idades.webp',
@@ -439,7 +457,7 @@ export const PROJECTS: Project[] = [
     highlights: [
       'Salas online com WebSockets e sincronização exata de cronômetro no servidor.',
       'Mais de 400 imagens WebP otimizadas localmente para abrir rápido.',
-      'Contas integradas ao login do GameHub.',
+      'Contas integradas ao login do GameHub SSO.',
     ],
   },
   {
@@ -449,10 +467,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Jogo incremental PWA com 20 biomas, árvore de 46 habilidades e Neon.',
     summary:
       'Clicker em JavaScript modular com 20 biomas, 32 fases por bioma, árvore de ascensão com 46 nós, 3 classes permanentes e chefes táticos. Funciona como PWA e salva progresso na nuvem com Neon PostgreSQL.',
-    category: 'games',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: false,
     githubUrl: null,
     liveUrl: 'https://clicker-simulator-4ti.pages.dev',
     cover: '/covers/cover-clicker.webp',
@@ -478,10 +498,12 @@ export const PROJECTS: Project[] = [
     tagline: 'Jogo em HTML5 Canvas puro com áudio procedural e álbum em IndexedDB.',
     summary:
       'Jogo feito sem bibliotecas externas usando HTML5 Canvas para pintura, corte e decoração, com zoom/pan no mouse e toque, desfazer (Ctrl+Z) e álbum local de até 24 fotos salvo em IndexedDB.',
-    category: 'games',
+    category: 'game-hub',
     featured: false,
     isSenai: false,
     isPrivate: true,
+    inGameHub: true,
+    usesGameHubSso: true,
     githubUrl: null,
     liveUrl: 'https://manicure.mayconarea42.workers.dev',
     cover: '/covers/cover-manicure.webp',
@@ -507,7 +529,7 @@ export const PROJECTS: Project[] = [
     tagline: 'Arena 2D em JavaScript com economia, loja, chat e banco Supabase.',
     summary:
       'Projeto multiplayer 2D inspirado em Mope.io com modos de jogo, loja, sistema de níveis e missões, chat online e persistência de usuários e pontuações usando Supabase e PL/pgSQL.',
-    category: 'games',
+    category: 'other',
     featured: false,
     isSenai: false,
     isPrivate: true,

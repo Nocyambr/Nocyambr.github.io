@@ -91,6 +91,8 @@ export function App() {
 
       <ProjectModal
         project={selectedProject}
+        allProjects={PROJECTS}
+        onSelectProject={setSelectedProject}
         onClose={() => setSelectedProject(null)}
       />
     </div>

@@ -5,10 +5,17 @@ import { CATEGORY_LABELS, Project } from '../data/projects';
 
 interface ProjectModalProps {
   project: Project | null;
+  allProjects: Project[];
+  onSelectProject: (project: Project) => void;
   onClose: () => void;
 }
 
-export function ProjectModal({ project, onClose }: ProjectModalProps) {
+export function ProjectModal({
+  project,
+  allProjects,
+  onSelectProject,
+  onClose,
+}: ProjectModalProps) {
   useEffect(() => {
     if (!project) return;
     const prevOverflow = document.body.style.overflow;
@@ -26,6 +33,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
   }, [project, onClose]);
 
   if (!project) return null;
+
+  const gameHubParent = allProjects.find((p) => p.id === 'game-hub');
+  const attachedGames =
+    project.id === 'game-hub' ? allProjects.filter((p) => p.inGameHub) : [];
 
   return (
     <div
@@ -66,7 +77,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             <img
               src={project.cover}
               alt={project.title}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover object-top"
             />
           </div>
         )}
@@ -87,6 +98,18 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               )}
             </span>
           </div>
+
+          {project.inGameHub && gameHubParent && (
+            <div className="mt-2">
+              <button
+                type="button"
+                onClick={() => onSelectProject(gameHubParent)}
+                className="inline-flex items-center gap-1.5 rounded border border-blue-200 bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-800 hover:bg-blue-100 dark:border-blue-900 dark:bg-blue-950/60 dark:text-blue-300"
+              >
+                Anexado ao GameHub {project.usesGameHubSso ? '(com Login Único SSO)' : '(catálogo)'} →
+              </button>
+            </div>
+          )}
 
           <p className="mt-3 text-sm leading-relaxed text-stone-700 dark:text-stone-300">
             {project.summary}
@@ -134,6 +157,31 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               ))}
             </ul>
           </div>
+
+          {attachedGames.length > 0 && (
+            <div className="mt-6">
+              <h3 className="text-xs font-semibold tracking-wider text-stone-500 uppercase dark:text-stone-400">
+                Jogos anexados ao GameHub ({attachedGames.length})
+              </h3>
+              <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                {attachedGames.map((game) => (
+                  <button
+                    key={game.id}
+                    type="button"
+                    onClick={() => onSelectProject(game)}
+                    className="flex items-center justify-between rounded-md border border-stone-200 px-3 py-2 text-left text-xs transition-colors hover:border-stone-300 hover:bg-stone-50 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900"
+                  >
+                    <span className="font-medium text-stone-900 dark:text-stone-100">
+                      {game.title}
+                    </span>
+                    <span className="font-mono text-[11px] text-stone-500 dark:text-stone-400">
+                      {game.usesGameHubSso ? 'SSO' : 'Catálogo'}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="mt-5 flex flex-wrap gap-1.5">
             {project.allTech.map((tech) => (
